@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  stackvo-tools:
+    image: stackvo/tools:latest
+    container_name: stackvo-tools
+    restart: unless-stopped
+    
+    ports:
+      - "8080:80"
+    
+    environment:
+      # ===== TOOL ENABLE FLAGS =====
+      # Set to "true" to enable, "false" to disable
+      
+      # Adminer - Universal database management tool
+      TOOLS_ADMINER_ENABLE: "true"
+      TOOLS_ADMINER_VERSION: "4.8.1"
+      
+      # PhpMyAdmin - MySQL/MariaDB management
+      TOOLS_PHPMYADMIN_ENABLE: "true"
+      TOOLS_PHPMYADMIN_VERSION: "5.2.1"
+      
+      # PhpPgAdmin - PostgreSQL management
+      TOOLS_PHPPGADMIN_ENABLE: "false"
+      TOOLS_PHPPGADMIN_VERSION: "7.13.0"
+      
+      # MongoDB-PHP-GUI - MongoDB management
+      TOOLS_PHPMONGO_ENABLE: "false"
+      TOOLS_PHPMONGO_VERSION: "1.3.3"
+      
+      # PhpMemcachedAdmin - Memcached management
+      TOOLS_PHPMEMCACHEDADMIN_ENABLE: "false"
+      TOOLS_PHPMEMCACHEDADMIN_VERSION: "1.3.0"
+      
+      # OpCacheGUI - PHP OpCache monitoring
+      TOOLS_OPCACHE_ENABLE: "false"
+      TOOLS_OPCACHE_VERSION: "3.6.0"
+      
+      # Kafbat Kafka UI - Kafka management (Java-based)
+      TOOLS_KAFBAT_ENABLE: "false"
+      TOOLS_KAFBAT_VERSION: "1.4.2"
+    
+    volumes:
+      # Persist installed tools (avoid re-downloading on restart)
+      - tools-data:/var/www/html
+    
+    networks:
+      - app-network
+
+volumes:
+  tools-data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
