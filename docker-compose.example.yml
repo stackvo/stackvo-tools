@@ -14,11 +14,11 @@ services:
       # Set to "true" to enable, "false" to disable
       
       # Adminer - Universal database management tool
-      TOOLS_ADMINER_ENABLE: "true"
+      TOOLS_ADMINER_ENABLE: "false"
       TOOLS_ADMINER_VERSION: "4.8.1"
       
       # PhpMyAdmin - MySQL/MariaDB management
-      TOOLS_PHPMYADMIN_ENABLE: "true"
+      TOOLS_PHPMYADMIN_ENABLE: "false"
       TOOLS_PHPMYADMIN_VERSION: "5.2.1"
       
       # PhpPgAdmin - PostgreSQL management
