@@ -2,49 +2,65 @@ version: '3.8'
 
 services:
   stackvo-tools:
-    image: stackvo/tools:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: stackvo/tools:latest # Tag for local built image
     container_name: stackvo-tools
     restart: unless-stopped
-    
-    ports:
-      - "8080:80"
-    
-    environment:
-      # ===== TOOL ENABLE FLAGS =====
-      # Set to "true" to enable, "false" to disable
-      
-      # Adminer - Universal database management tool
-      TOOLS_ADMINER_ENABLE: "false"
-      TOOLS_ADMINER_VERSION: "4.8.1"
-      
-      # PhpMyAdmin - MySQL/MariaDB management
-      TOOLS_PHPMYADMIN_ENABLE: "false"
-      TOOLS_PHPMYADMIN_VERSION: "5.2.1"
-      
-      # PhpPgAdmin - PostgreSQL management
-      TOOLS_PHPPGADMIN_ENABLE: "false"
-      TOOLS_PHPPGADMIN_VERSION: "7.13.0"
-      
-      # MongoDB-PHP-GUI - MongoDB management
-      TOOLS_PHPMONGO_ENABLE: "false"
-      TOOLS_PHPMONGO_VERSION: "1.3.3"
-      
-      # PhpMemcachedAdmin - Memcached management
-      TOOLS_PHPMEMCACHEDADMIN_ENABLE: "false"
-      TOOLS_PHPMEMCACHEDADMIN_VERSION: "1.3.0"
-      
-      # OpCacheGUI - PHP OpCache monitoring
-      TOOLS_OPCACHE_ENABLE: "false"
-      TOOLS_OPCACHE_VERSION: "3.6.0"
-      
-      # Kafbat Kafka UI - Kafka management (Java-based)
-      TOOLS_KAFBAT_ENABLE: "false"
-      TOOLS_KAFBAT_VERSION: "1.4.2"
-    
+
+    labels:
+      # Traefik global
+      - "traefik.enable=true"
+      - "traefik.docker.network=stackvo-net"
+
+      # Adminer
+      - "traefik.http.routers.adminer.rule=Host(`adminer.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.adminer.entrypoints=websecure"
+      - "traefik.http.routers.adminer.tls=true"
+      - "traefik.http.routers.adminer.service=stackvo-tools"
+      - "traefik.http.services.stackvo-tools.loadbalancer.server.port=80"
+
+      # PhpMyAdmin
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.routers.phpmyadmin.service=stackvo-tools"
+
+      # PhpPgAdmin
+      - "traefik.http.routers.phppgadmin.rule=Host(`phppgadmin.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.phppgadmin.entrypoints=websecure"
+      - "traefik.http.routers.phppgadmin.tls=true"
+      - "traefik.http.routers.phppgadmin.service=stackvo-tools"
+
+      # PhpMongo
+      - "traefik.http.routers.phpmongo.rule=Host(`phpmongo.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.phpmongo.entrypoints=websecure"
+      - "traefik.http.routers.phpmongo.tls=true"
+      - "traefik.http.routers.phpmongo.service=stackvo-tools"
+
+      # PhpMemcachedAdmin
+      - "traefik.http.routers.phpmemcachedadmin.rule=Host(`phpmemcachedadmin.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.phpmemcachedadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmemcachedadmin.tls=true"
+      - "traefik.http.routers.phpmemcachedadmin.service=stackvo-tools"
+
+      # OpCache
+      - "traefik.http.routers.opcache.rule=Host(`opcache.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.opcache.entrypoints=websecure"
+      - "traefik.http.routers.opcache.tls=true"
+      - "traefik.http.routers.opcache.service=stackvo-tools"
+
+      # Kafbat
+      - "traefik.http.routers.kafbat.rule=Host(`kafbat.${BASE_DOMAIN:-stackvo.loc}`)"
+      - "traefik.http.routers.kafbat.entrypoints=websecure"
+      - "traefik.http.routers.kafbat.tls=true"
+      - "traefik.http.routers.kafbat.service=stackvo-tools"
+
     volumes:
       # Persist installed tools (avoid re-downloading on restart)
       - tools-data:/var/www/html
-    
+
     networks:
       - app-network
 
@@ -54,4 +70,5 @@ volumes:
 
 networks:
   app-network:
-    driver: bridge
+    external: true
+    name: stackvo-net

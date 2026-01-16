@@ -175,7 +175,7 @@ http {
         }
         
         location / {
-            return 404 "Not Found\n";
+            return 404 "Tool not enabled or invalid subdomain\n";
             add_header Content-Type text/plain;
         }
     }
@@ -185,7 +185,7 @@ NGINX_CONFIG
 if [ "$ADMINER_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # Adminer
+    # Adminer (Traefik routes adminer.* subdomain to this container)
     server {
         listen 80;
         server_name adminer.*;
@@ -210,7 +210,7 @@ fi
 if [ "$PHPMYADMIN_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # PhpMyAdmin
+    # PhpMyAdmin (Traefik routes phpmyadmin.* subdomain to this container)
     server {
         listen 80;
         server_name phpmyadmin.*;
@@ -235,7 +235,7 @@ fi
 if [ "$PHPPGADMIN_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # PhpPgAdmin
+    # PhpPgAdmin (Traefik routes phppgadmin.* subdomain to this container)
     server {
         listen 80;
         server_name phppgadmin.*;
@@ -260,7 +260,7 @@ fi
 if [ "$PHPMONGO_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # MongoDB-PHP-GUI
+    # MongoDB-PHP-GUI (Traefik routes phpmongo.* subdomain to this container)
     server {
         listen 80;
         server_name phpmongo.*;
@@ -285,7 +285,7 @@ fi
 if [ "$PHPMEMCACHEDADMIN_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # PhpMemcachedAdmin
+    # PhpMemcachedAdmin (Traefik routes phpmemcachedadmin.* subdomain to this container)
     server {
         listen 80;
         server_name phpmemcachedadmin.*;
@@ -310,7 +310,7 @@ fi
 if [ "$OPCACHE_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # OpCacheGUI
+    # OpCacheGUI (Traefik routes opcache.* subdomain to this container)
     server {
         listen 80;
         server_name opcache.*;
@@ -335,7 +335,7 @@ fi
 if [ "$KAFBAT_ENABLED" = "true" ]; then
     cat >> /etc/nginx/nginx.conf <<'NGINX_CONFIG'
     
-    # Kafbat Kafka UI
+    # Kafbat Kafka UI (Traefik routes kafbat.* subdomain to this container)
     server {
         listen 80;
         server_name kafbat.*;
